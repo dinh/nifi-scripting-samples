@@ -55,8 +55,7 @@ class SplitCallback(InputStreamCallback):
 
             # Create FlowFiles for array items
             splits = []
-            fragment_index = 0
-            for item in input_list:
+            for fragment_index, item in enumerate(input_list):
                 color = item['color']
                 splitFlowFile = session.create(self.parentFlowFile)
                 writeCallback = WriteCallback()
@@ -68,8 +67,6 @@ class SplitCallback(InputStreamCallback):
                 })
                 splits.append(splitFlowFile)
                 log.info(color)
-                fragment_index += 1
-
             for splitFlowFile in splits:
                 session.transfer(splitFlowFile, REL_SUCCESS)
         except:
